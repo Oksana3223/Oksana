@@ -7,25 +7,125 @@ Write your code in this editor and press "Run" button to compile and execute it.
 *******************************************************************************/
 
 #include <iostream>
-using namespace std;
+#include <string>
 
-int main()
-{
-    double a,b;
-    cout << "Введите длину первой стороны параллелограмма (a):";
-    cin >> a;
+struct Node {
+    std::string name;
+    int age;
+    double height;
+    Node* next;
+};
+
+class LinkedList {
+public:
+    LinkedList() : head(nullptr) {}
+    ~LinkedList();
     
-    cout << "Введите длину второй стороны параллелограмма (b):";
-    cin >> b;
-    
-    if (a<=0 || b<=0) {
-    cout << "Длины сторон должны быть положительными числами." << endl;
-    return 1; 
+    void addToFront(const std::string& name, int age, double height);
+    void addToEnd(const std::string& name, int age, double height);
+    void addAfter(const std::string& target, const std::string& name, int age, double height);
+    void addBefore(const std::string& target, const std::string& name, int age, double height);
+    void removeByName(const std::string& name);
+    void display() const;
+
+private:
+    Node* head;
+};
+
+LinkedList::~LinkedList() {
+    while (head) {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
     }
-    
-    double area = a*b;
-    
-    cout << "Площадь параллелограмма:" << area << endl;
+}
 
+void LinkedList::addToFront(const std::string& name, int age, double height) {
+    Node* newNode = new Node{name, age, height, head};
+    head = newNode;
+}
+
+void LinkedList::addToEnd(const std::string& name, int age, double height) {
+    Node* newNode = new Node{name, age, height, nullptr};
+    if (!head) {
+        head = newNode;
+        return;
+    }
+    Node* temp = head;
+    while (temp->next) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+void LinkedList::addAfter(const std::string& target, const std::string& name, int age, double height) {
+    Node* temp = head;
+    while (temp && temp->name != target) {
+        temp = temp->next;
+    }
+    if (temp) {
+        Node* newNode = new Node{name, age, height, temp->next};
+        temp->next = newNode;
+    }
+}
+
+void LinkedList::addBefore(const std::string& target, const std::string& name, int age, double height) {
+    if (!head) return;
+    if (head->name == target) {
+        addToFront(name, age, height);
+        return;
+    }
+    Node* temp = head;
+    while (temp->next && temp->next->name != target) {
+        temp = temp->next;
+    }
+    if (temp->next) {
+        Node* newNode = new Node{name, age, height, temp->next};
+        temp->next = newNode;
+    }
+}
+
+void LinkedList::removeByName(const std::string& name) {
+    if (!head) return;
+    if (head->name == name) {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        return;
+    }
+    Node* temp = head;
+    while (temp->next && temp->next->name != name) {
+        temp = temp->next;
+    }
+    if (temp->next) {
+        Node* toDelete = temp->next;
+        temp->next = temp->next->next;
+        delete toDelete;
+    }
+}
+
+void LinkedList::display() const {
+    Node* temp = head;
+    while (temp) {
+        std::cout << "Name: " << temp->name << ", Age: " << temp->age << ", Height: " << temp->height << '\n';
+        temp = temp->next;
+    }
+}
+
+int main() {
+    LinkedList list;
+    
+    list.addToEnd("Egor", 25, 5.6);
+    list.addToFront("Oksana", 30, 5.9);
+    list.addAfter("Egor", "Masha", 28, 5.8);
+    list.addBefore("Egor", "Vika", 35, 5.7);
+    
+    std::cout << "List after additions:\n";
+    list.display();
+    
+    list.removeByName("Masha");
+    std::cout << "\nList after removing Masha:\n";
+    list.display();
+    
     return 0;
 }
