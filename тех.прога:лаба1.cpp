@@ -109,10 +109,10 @@ void LinkedList::display() const {
 int main() {
     LinkedList list;
     
-    list.addToEnd("Egor", 25, 5.6);
-    list.addToFront("Oksana", 30, 5.9);
-    list.addAfter("Egor", "Masha", 28, 5.8);
-    list.addBefore("Egor", "Vika", 35, 5.7);
+    list.addToEnd("Egor", 25, 56);
+    list.addToFront("Oksana", 30, 59);
+    list.addAfter("Egor", "Masha", 28, 58);
+    list.addBefore("Egor", "Vika", 35, 57);
     
     std::cout << "List after additions:\n";
     list.display();
