@@ -1,0 +1,41 @@
+#include <iostream>
+#include <cmath>
+
+const double g = 9.81;
+
+double f(double t, double V, double alpha, double H, double y_target) {
+    return H + V * t * sin(alpha) - (g * t * t) / 2 - y_target;
+}
+
+double simple_iteration_method(double (*f)(double, double, double, double, double), double t0, double V, double alpha, double H, double y_target, double eps, int max_iter) {
+    double t = t0;
+    for (int i = 0; i < max_iter; ++i) {
+        double t_new = t - f(t, V, alpha, H, y_target) / (V * sin(alpha) - g * t);
+        if (std::abs(t_new - t) < eps) {
+            return t_new;
+        }
+        t = t_new;
+    }
+    return t;
+}
+
+int main() {
+    double V = 20;
+    double alpha = 30 * M_PI / 180;
+    double H = 10;
+    double y_target = 0;
+
+    double t0 = 1;
+    double epsilon = 1e-6;
+    int max_iter = 1000;
+
+    double t = simple_iteration_method(f, t0, V, alpha, H, y_target, epsilon, max_iter);
+    double x = V * t * cos(alpha);
+    double y = H + V * t * sin(alpha) - (g * t * t) / 2;
+
+    std::cout << "Time t: " << t << " s" << std::endl;
+    std::cout << "Distance x: " << x << " m" << std::endl;
+    std::cout << "Height y: " << y << " m" << std::endl;
+
+    return 0;
+}
