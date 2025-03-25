@@ -1,0 +1,37 @@
+import math
+
+g = 9.81
+
+def f(alpha, V, T):
+    return math.sin(alpha) - (g * T) / (2 * V)
+
+def chord_method(f, a, b, V, T, eps, max_iter):
+    if f(a, V, T) * f(b, V, T) >= 0:
+        return None
+
+    x = a - (b - a) * f(a, V, T) / (f(b, V, T) - f(a, V, T))
+
+    for _ in range(max_iter):
+        if abs(f(x, V, T)) < eps:
+            break
+
+        if f(a, V, T) * f(x, V, T) < 0:
+            b = x
+        else:
+            a = x
+
+        x = a - (b - a) * f(a, V, T) / (f(b, V, T) - f(a, V, T))
+
+    return x * 180 / math.pi
+
+V = 20
+T = 2
+
+a = 0
+b = math.pi / 2
+epsilon = 1e-6
+max_iter = 1000
+
+alpha = chord_method(f, a, b, V, T, epsilon, max_iter)
+if alpha is not None:
+    print(f"Angle alpha: {alpha} degrees")
