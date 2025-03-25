@@ -1,0 +1,43 @@
+#include <iostream>
+#include <cmath>
+
+double f(double T, double omega, double phi0) {
+    return T - (M_PI / 2 - phi0) / omega;
+}
+
+double df(double omega) {
+    return 1;
+}
+
+double newton_method(double (*f)(double, double, double), double (*df)(double), double x0, double omega, double phi0, double eps, int max_iter) {
+    double x = x0;
+    for (int i = 0; i < max_iter; ++i) {
+        double f_x = f(x, omega, phi0);
+        double f_derivative = df(omega);
+        double x_new = x - f_x / f_derivative;
+
+        if (std::abs(x_new - x) < eps) {
+            return x_new;
+        }
+        x = x_new;
+    }
+    return x;
+}
+
+int main() {
+    double omega, k;
+    std::cout << "Enter frequency omega: ";
+    std::cin >> omega;
+    std::cout << "Enter parameter k: ";
+    std::cin >> k;
+
+    double phi0 = asin(1 / k);
+    double x0 = 1;
+    double epsilon = 1e-6;
+    int max_iter = 1000;
+
+    double T = newton_method(f, df, x0, omega, phi0, epsilon, max_iter);
+    std::cout << "Time T: " << T << " seconds" << std::endl;
+
+    return 0;
+}
