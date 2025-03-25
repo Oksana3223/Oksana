@@ -1,0 +1,31 @@
+import math
+
+g = 9.81
+
+def f(L, V, alpha):
+    return L - (V**2 * math.sin(2 * alpha)) / g
+
+def df(V, alpha):
+    return 1
+
+def newton_method(f, df, x0, V, alpha, eps, max_iter):
+    x = x0
+    for _ in range(max_iter):
+        f_x = f(x, V, alpha)
+        f_derivative = df(V, alpha)
+        x_new = x - f_x / f_derivative
+
+        if abs(x_new - x) < eps:
+            return x_new
+        x = x_new
+    return x
+
+V = 20
+alpha = 30 * math.pi / 180
+
+x0 = 10
+epsilon = 1e-6
+max_iter = 1000
+
+L = newton_method(f, df, x0, V, alpha, epsilon, max_iter)
+print(f"Flight distance L: {L} meters")
