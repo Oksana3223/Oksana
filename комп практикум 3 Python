@@ -1,0 +1,30 @@
+import math
+
+g = 9.81
+
+def f(alpha, H, L):
+    return math.tan(alpha) - (4 * H) / L
+
+def dichotomy_method(f, a, b, H, L, eps):
+    while (b - a) / 2 > eps:
+        c = (a + b) / 2
+        if f(c, H, L) == 0:
+            return c
+        elif f(a, H, L) * f(c, H, L) < 0:
+            b = c
+        else:
+            a = c
+    return (a + b) / 2
+
+H = 10
+L = 50
+
+a = 0
+b = math.pi / 2
+epsilon = 1e-6
+
+alpha = dichotomy_method(f, a, b, H, L, epsilon)
+V = math.sqrt((g * L) / math.sin(2 * alpha))
+
+print(f"Angle alpha: {alpha * 180 / math.pi} degrees")
+print(f"Initial velocity V: {V} m/s")
