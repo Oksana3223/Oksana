@@ -1,0 +1,37 @@
+#include <iostream>
+#include <cmath>
+
+const double G = 6.672e-11;
+const double M = 5.96e24;
+const double R = 6.37e6;
+
+double f(double g, double h) {
+    return g - (G * M) / ((R + h) * (R + h));
+}
+
+double simple_iteration_method(double (*f)(double, double), double g0, double h, double eps, int max_iter) {
+    double g = g0;
+    for (int i = 0; i < max_iter; ++i) {
+        double g_new = (G * M) / ((R + h) * (R + h));
+        if (std::abs(g_new - g) < eps) {
+            return g_new;
+        }
+        g = g_new;
+    }
+    return g;
+}
+
+int main() {
+    double h;
+    std::cout << "Enter height h: ";
+    std::cin >> h;
+
+    double g0 = 9.81;
+    double epsilon = 1e-6;
+    int max_iter = 1000;
+
+    double g = simple_iteration_method(f, g0, h, epsilon, max_iter);
+    std::cout << "Gravity g: " << g << " m/s^2" << std::endl;
+
+    return 0;
+}
