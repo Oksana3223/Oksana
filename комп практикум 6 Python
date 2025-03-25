@@ -1,0 +1,28 @@
+import math
+
+def f(T, V, U, S):
+    t1 = S / (V + U)
+    t2 = S / (V - U)
+    return T - (t1 + t2)
+
+def dichotomy_method(f, a, b, V, U, S, eps):
+    while (b - a) / 2 > eps:
+        c = (a + b) / 2
+        if f(c, V, U, S) == 0:
+            return c
+        elif f(a, V, U, S) * f(c, V, U, S) < 0:
+            b = c
+        else:
+            a = c
+    return (a + b) / 2
+
+V = 10
+U = 2
+S = 100
+
+a = 0
+b = 100
+epsilon = 1e-6
+
+T = dichotomy_method(f, a, b, V, U, S, epsilon)
+print(f"Total time T: {T} seconds")
