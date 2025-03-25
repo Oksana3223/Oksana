@@ -1,0 +1,26 @@
+import math
+
+g = 9.81
+
+def f(S, U, H):
+    T = math.sqrt(2 * H / g)
+    return S - U * T
+
+def simple_iteration_method(f, S0, U, H, eps, max_iter):
+    S = S0
+    for _ in range(max_iter):
+        S_new = S - f(S, U, H) / (-1)
+        if abs(S_new - S) < eps:
+            return S_new
+        S = S_new
+    return S
+
+U = 200
+H = 1000
+
+S0 = 100
+epsilon = 1e-6
+max_iter = 1000
+
+S = simple_iteration_method(f, S0, U, H, epsilon, max_iter)
+print(f"Distance S: {S} meters")
