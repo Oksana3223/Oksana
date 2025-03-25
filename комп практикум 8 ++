@@ -1,0 +1,35 @@
+#include <iostream>
+#include <cmath>
+
+double f(double S, double V, double t) {
+    double S1 = V * t;
+    double a = V / t;
+    double S2 = (a * t * t) / 2;
+    return S - (S1 + S2);
+}
+
+double simple_iteration_method(double (*f)(double, double, double), double S0, double V, double t, double eps, int max_iter) {
+    double S = S0;
+    for (int i = 0; i < max_iter; ++i) {
+        double S_new = S - f(S, V, t) / (-1);
+        if (std::abs(S_new - S) < eps) {
+            return S_new;
+        }
+        S = S_new;
+    }
+    return S;
+}
+
+int main() {
+    double V = 20;
+    double t = 10;
+
+    double S0 = 100;
+    double epsilon = 1e-6;
+    int max_iter = 1000;
+
+    double S = simple_iteration_method(f, S0, V, t, epsilon, max_iter);
+    std::cout << "Total distance S: " << S << " meters" << std::endl;
+
+    return 0;
+}
