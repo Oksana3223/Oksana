@@ -1,0 +1,32 @@
+import math
+
+g = 9.81
+
+def f(t, V, alpha, H, y_target):
+    return H + V * t * math.sin(alpha) - (g * t**2) / 2 - y_target
+
+def simple_iteration_method(f, t0, V, alpha, H, y_target, eps, max_iter):
+    t = t0
+    for _ in range(max_iter):
+        t_new = t - f(t, V, alpha, H, y_target) / (V * math.sin(alpha) - g * t)
+        if abs(t_new - t) < eps:
+            return t_new
+        t = t_new
+    return t
+
+V = 20
+alpha = 30 * math.pi / 180
+H = 10
+y_target = 0
+
+t0 = 1
+epsilon = 1e-6
+max_iter = 1000
+
+t = simple_iteration_method(f, t0, V, alpha, H, y_target, epsilon, max_iter)
+x = V * t * math.cos(alpha)
+y = H + V * t * math.sin(alpha) - (g * t**2) / 2
+
+print(f"Time t: {t} s")
+print(f"Distance x: {x} m")
+print(f"Height y: {y} m")
