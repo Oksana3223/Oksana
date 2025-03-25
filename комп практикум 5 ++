@@ -1,0 +1,35 @@
+#include <iostream>
+#include <cmath>
+
+const double g = 9.81;
+
+double f(double S, double U, double H) {
+    double T = sqrt(2 * H / g);
+    return S - U * T;
+}
+
+double simple_iteration_method(double (*f)(double, double, double), double S0, double U, double H, double eps, int max_iter) {
+    double S = S0;
+    for (int i = 0; i < max_iter; ++i) {
+        double S_new = S - f(S, U, H) / (-1);
+        if (std::abs(S_new - S) < eps) {
+            return S_new;
+        }
+        S = S_new;
+    }
+    return S;
+}
+
+int main() {
+    double U = 200;
+    double H = 1000;
+
+    double S0 = 100;
+    double epsilon = 1e-6;
+    int max_iter = 1000;
+
+    double S = simple_iteration_method(f, S0, U, H, epsilon, max_iter);
+    std::cout << "Distance S: " << S << " meters" << std::endl;
+
+    return 0;
+}
