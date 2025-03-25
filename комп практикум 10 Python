@@ -1,0 +1,26 @@
+import math
+
+G = 6.672e-11
+M = 5.96e24
+R = 6.37e6
+
+def f(g, h):
+    return g - (G * M) / ((R + h)**2)
+
+def simple_iteration_method(f, g0, h, eps, max_iter):
+    g = g0
+    for _ in range(max_iter):
+        g_new = (G * M) / ((R + h)**2)
+        if abs(g_new - g) < eps:
+            return g_new
+        g = g_new
+    return g
+
+h = float(input("Enter height h: "))
+
+g0 = 9.81
+epsilon = 1e-6
+max_iter = 1000
+
+g = simple_iteration_method(f, g0, h, epsilon, max_iter)
+print(f"Gravity g: {g} m/s^2")
