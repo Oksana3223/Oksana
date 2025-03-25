@@ -1,0 +1,37 @@
+#include <iostream>
+#include <cmath>
+
+double f(double T, double V, double U, double S) {
+    double t1 = S / (V + U);
+    double t2 = S / (V - U);
+    return T - (t1 + t2);
+}
+
+double dichotomy_method(double (*f)(double, double, double, double), double a, double b, double V, double U, double S, double eps) {
+    while ((b - a) / 2 > eps) {
+        double c = (a + b) / 2;
+        if (f(c, V, U, S) == 0) {
+            return c;
+        } else if (f(a, V, U, S) * f(c, V, U, S) < 0) {
+            b = c;
+        } else {
+            a = c;
+        }
+    }
+    return (a + b) / 2;
+}
+
+int main() {
+    double V = 10;
+    double U = 2;
+    double S = 100;
+
+    double a = 0;
+    double b = 100;
+    double epsilon = 1e-6;
+
+    double T = dichotomy_method(f, a, b, V, U, S, epsilon);
+    std::cout << "Total time T: " << T << " seconds" << std::endl;
+
+    return 0;
+}
