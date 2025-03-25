@@ -1,0 +1,30 @@
+import math
+
+def f(T, omega, phi0):
+    return T - (math.pi / 2 - phi0) / omega
+
+def df(omega):
+    return 1
+
+def newton_method(f, df, x0, omega, phi0, eps, max_iter):
+    x = x0
+    for _ in range(max_iter):
+        f_x = f(x, omega, phi0)
+        f_derivative = df(omega)
+        x_new = x - f_x / f_derivative
+
+        if abs(x_new - x) < eps:
+            return x_new
+        x = x_new
+    return x
+
+omega = float(input("Enter frequency omega: "))
+k = float(input("Enter parameter k: "))
+
+phi0 = math.asin(1 / k)
+x0 = 1
+epsilon = 1e-6
+max_iter = 1000
+
+T = newton_method(f, df, x0, omega, phi0, epsilon, max_iter)
+print(f"Time T: {T} seconds")
