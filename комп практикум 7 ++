@@ -1,0 +1,43 @@
+#include <iostream>
+#include <cmath>
+
+double f(double V1, double S, double t) {
+    return V1 - S / t;
+}
+
+double df(double S, double t) {
+    return 1;
+}
+
+double newton_method(double (*f)(double, double, double), double (*df)(double, double), double x0, double S, double t, double eps, int max_iter) {
+    double x = x0;
+    for (int i = 0; i < max_iter; ++i) {
+        double f_x = f(x, S, t);
+        double f_derivative = df(S, t);
+        double x_new = x - f_x / f_derivative;
+
+        if (std::abs(x_new - x) < eps) {
+            return x_new;
+        }
+        x = x_new;
+    }
+    return x;
+}
+
+int main() {
+    double V = 60;
+    double S = 120;
+    double t = 2;
+
+    double x0 = 50;
+    double epsilon = 1e-6;
+    int max_iter = 1000;
+
+    double V1 = newton_method(f, df, x0, S, t, epsilon, max_iter);
+    double V2 = S / (2 * S / V - t);
+
+    std::cout << "Speed V1: " << V1 << " km/h" << std::endl;
+    std::cout << "Speed V2: " << V2 << " km/h" << std::endl;
+
+    return 0;
+}
