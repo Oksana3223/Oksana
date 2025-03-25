@@ -1,0 +1,33 @@
+import math
+
+def f(V1, S, t):
+    return V1 - S / t
+
+def df(S, t):
+    return 1
+
+def newton_method(f, df, x0, S, t, eps, max_iter):
+    x = x0
+    for _ in range(max_iter):
+        f_x = f(x, S, t)
+        f_derivative = df(S, t)
+        x_new = x - f_x / f_derivative
+
+        if abs(x_new - x) < eps:
+            return x_new
+        x = x_new
+    return x
+
+V = 60
+S = 120
+t = 2
+
+x0 = 50
+epsilon = 1e-6
+max_iter = 1000
+
+V1 = newton_method(f, df, x0, S, t, epsilon, max_iter)
+V2 = S / (2 * S / V - t)
+
+print(f"Speed V1: {V1} km/h")
+print(f"Speed V2: {V2} km/h")
